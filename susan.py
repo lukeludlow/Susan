@@ -12,20 +12,16 @@ ask = Ask(app, '/')
 
 @ask.launch
 def launch():
-    #launch_msg = render_template('launch')
-    #return statement(launch_msg)
     subprocess.call(['./scripts/pythontest.sh'])
     return statement('launch')
 
 @ask.intent('HelloIntent')
 def hello():
-    #return statement('it worked')
-    hi_message = render_template('hi. it worked.')
-    return statement(hi_msg)
+    return statement('hi. hello intent worked.')
 
+@ask.intent('NodIntent')
+def nod():
+    return statement('nod intent')
 
 if __name__ == '__main__':
-#    if sys.version_info.major < 3:
-#        reload(sys)
-#    sys.setdefaultencoding('utf-8')
     app.run(debug=True,host='0.0.0.0', port=8000)
