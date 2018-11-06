@@ -1,0 +1,1 @@
+./arm_touch.sh
