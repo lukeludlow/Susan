@@ -87,7 +87,7 @@ class Tricks():
         # self.joints.position[3] = 0
         # self.joints.position[4] = 0
         # self.joints.position[5] = 0
-        self.joints = joints_start
+        self.joints.position = joints_start
         self.pub_joints.publish(self.joints)
 
         # self.grip = -100
