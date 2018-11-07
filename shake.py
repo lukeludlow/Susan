@@ -81,7 +81,7 @@ class Tricks():
 
     def shake(self):
         joints_start = [-1.513, -1.8555, -3.050, 0, 0.33, -1.680]
-        shake_start = [-1.485, -2.973, -2.583, 0, 0.649, -0,815]
+        shake_start = [-1.485, -2.973, -2.583, 0, 0.649, -0.815]
         shake_wrist_top = 0.958
         shake_wrist_bottom = 0.279
 
@@ -92,7 +92,7 @@ class Tricks():
         self.state.speed = 'Med'
         self.joints.position = shake_start
         self.pub_joints.publish(self.joints)
-        rospy.sleep(1.0)
+        rospy.sleep(3.0)
 
         flip = False
         for i in range(8):
