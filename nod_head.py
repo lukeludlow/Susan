@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from __future__ import print_function
 import numpy as np
 import rospy
@@ -71,20 +72,44 @@ class Tricks(Controller):
         self.pub_gimbal = rospy.Publisher('/gimbal_cmd_position', DynamixelState, queue_size = 1)
 
 
-        self.nod()
+        #self.nod()
+        #self.gimbal_reset()
 
 
     def nod(self):
-        rospy.logwarn('Arrived at ball. LEG COMPLETE.')
+        rospy.logwarn('YEET')
         angle = radians(30)
-        for i in range(10):
+
+        rospy.logwarn('LOOK AROUND')
+        self.gimbal_reset()
+        leftright_angle = radians(90)
+        for i in range(4):
+            leftright_angle = -leftright_angle
+            self.gimbal_cmd.pan = leftright_angle
+            self.pub_gimbal.publish(self.gimbal_cmd)
+            rospy.sleep(0.8)
+        rospy.sleep(1.0)
+
+        rospy.logwarn('NOD HEAD')
+        self.gimbal_reset()
+        for i in range(8):
             angle = -angle
-            gimbal_cmd.tilt = angle
-            pub_gimbal.publish(self.gimbal_cmd)
-            rospy.sleep(.5)
-        gimbal_cmd.tilt = 0
-        pub_gimbal.publish(self.gimbal_cmd)
-        rospy.sleep(2.)
+            self.gimbal_cmd.tilt = angle
+            self.pub_gimbal.publish(self.gimbal_cmd)
+            rospy.sleep(0.2)
+        self.gimbal_cmd.tilt = 0
+        self.pub_gimbal.publish(self.gimbal_cmd)
+        rospy.sleep(0.1)
+        self.gimbal_reset()
+        rospy.sleep(1.0)
+
+    def gimbalStateCallback(self, msg):
+        self.gimbal_read_pan = msg.pan
+
+    def gimbal_reset(self):
+        self.gimbal_cmd.pan = self.PAN_HOME
+        self.gimbal_cmd.tilt = self.TILT_HOME
+        self.pub_gimbal.publish(self.gimbal_cmd)
 
 if __name__ == '__main__':
     rospy.init_node('nod_head')
