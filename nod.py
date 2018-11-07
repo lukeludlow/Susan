@@ -76,35 +76,38 @@ class Tricks(Controller):
         #self.gimbal_reset()
 
 
+    def gimbalStateCallback(self, msg):
+        self.gimbal_read_pan = msg.pan
+
+
     def nod(self):
         rospy.logwarn('YEET')
-        angle = radians(30)
 
         rospy.logwarn('LOOK AROUND')
         self.gimbal_reset()
-        leftright_angle = radians(90)
-        for i in range(4):
-            leftright_angle = -leftright_angle
-            self.gimbal_cmd.pan = leftright_angle
-            self.pub_gimbal.publish(self.gimbal_cmd)
-            rospy.sleep(0.8)
-        rospy.sleep(1.0)
+        rospy.sleep(0.2)
 
+        init_angle = radians(180)
+        self.gimbal_cmd.pan = init_angle
+        self.pub_gimbal.publish(self.gimbal_cmd)
+        rospy.sleep(2.5)
+        up_angle = radians(1)
+        self.gimbal_cmd.tilt = -up_angle
+        self.pub_gimbal.publish(self.gimbal_cmd)
+        rospy.sleep(1.0)
         rospy.logwarn('NOD HEAD')
         self.gimbal_reset()
+        rospy.sleep(1.0)
+        angle = radians(30)
         for i in range(8):
             angle = -angle
             self.gimbal_cmd.tilt = angle
             self.pub_gimbal.publish(self.gimbal_cmd)
             rospy.sleep(0.2)
-        self.gimbal_cmd.tilt = 0
         self.pub_gimbal.publish(self.gimbal_cmd)
-        rospy.sleep(0.1)
+        rospy.sleep(0.2)
         self.gimbal_reset()
         rospy.sleep(1.0)
-
-    def gimbalStateCallback(self, msg):
-        self.gimbal_read_pan = msg.pan
 
     def gimbal_reset(self):
         self.gimbal_cmd.pan = self.PAN_HOME
