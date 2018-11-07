@@ -30,7 +30,7 @@ class Tricks():
 
         # Initialize state; default = JointControl & Slow
         self.state.mode = 'JointControl' # 'JointControl', 'IK Arm - Base,Tool', 'IK Arm - Tool,Tool'
-        self.state.speed = 'Fast' # Slow, Med, Fast
+        self.state.speed = 'Slow' # Slow, Med, Fast
         self.state.kill = False
 
         # Initialize joints = instance of JointState
