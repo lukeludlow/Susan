@@ -147,19 +147,19 @@ class Tricks(Controller):
 
         self.getArmPosition()
 
-            def ikJointCallback(self, msg):
-        #for i in range(0,6):
-        #    self.joints.position[i] = msg.position[i]
-        #print "JOINT POSITIONS LENGTH FOR IK" + len(msg.position)
-        # Map turret
-        self.joints.position[0] = self.remap(msg.position[0], math.radians(-90),   math.radians(180),  -math.pi, math.pi)
-        self.joints.position[1] = self.remap(msg.position[1], math.radians(-5),    math.radians(90),   -math.pi, math.pi)
-        self.joints.position[2] = self.remap(msg.position[2], math.radians(-45),   math.radians(60),   -math.pi, math.pi)
-        self.joints.position[3] = self.remap(msg.position[3], math.radians(-170),  math.radians(170),  -math.pi, math.pi)
-        self.joints.position[4] = self.remap(msg.position[4], math.radians(-80),   math.radians(70),   -math.pi, math.pi)
-        self.joints.position[5] = self.remap(msg.position[5], math.radians(-190),  math.radians(190),  -math.pi, math.pi)
-        #print self.joints
-        self.pub_joints.publish(self.joints)
+        def ikJointCallback(self, msg):
+            #for i in range(0,6):
+            #    self.joints.position[i] = msg.position[i]
+            #print "JOINT POSITIONS LENGTH FOR IK" + len(msg.position)
+            # Map turret
+            self.joints.position[0] = self.remap(msg.position[0], math.radians(-90),   math.radians(180),  -math.pi, math.pi)
+            self.joints.position[1] = self.remap(msg.position[1], math.radians(-5),    math.radians(90),   -math.pi, math.pi)
+            self.joints.position[2] = self.remap(msg.position[2], math.radians(-45),   math.radians(60),   -math.pi, math.pi)
+            self.joints.position[3] = self.remap(msg.position[3], math.radians(-170),  math.radians(170),  -math.pi, math.pi)
+            self.joints.position[4] = self.remap(msg.position[4], math.radians(-80),   math.radians(70),   -math.pi, math.pi)
+            self.joints.position[5] = self.remap(msg.position[5], math.radians(-190),  math.radians(190),  -math.pi, math.pi)
+            #print self.joints
+            self.pub_joints.publish(self.joints)
 
     def ikPoseCallback(self,msg):
         self.pose_current = msg
@@ -176,9 +176,8 @@ class Tricks(Controller):
                 self.joints.position[2] = wristResp.position[2]
                 self.joints.position[3] = wristResp.position[3]
                 rospy.loginfo('Got Arm Position')
-                print wristResp.position
             except rospy.ServiceException, e:
-                print "Service call failed: %s" %e
+                # print "Service call failed: %s" %e
             except Exception, e:
                 rospy.logwarn('Arm could not find joints!!')
                 self.joints.position[0] = 0.0
