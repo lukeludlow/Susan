@@ -94,8 +94,9 @@ class Tricks():
         self.pub_joints.publish(self.joints)
         rospy.sleep(1.0)
 
-        flip = True
+        flip = False
         for i in range(8):
+            flip = not flip
             if flip:
                 self.joints.position[4] = shake_wrist_top
             else:
