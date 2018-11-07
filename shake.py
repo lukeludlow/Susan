@@ -81,12 +81,29 @@ class Tricks():
 
     def shake(self):
         joints_start = [-1.513, -1.8555, -3.050, 0, 0.33, -1.680]
-        # self.joints.position[0] = 0
-        # self.joints.position[1] = 0
-        # self.joints.position[2] = 0
-        # self.joints.position[3] = 0
-        # self.joints.position[4] = 0
-        # self.joints.position[5] = 0
+        shake_start = [-1.485, -2.973, -2.583, 0, 0.649, -0,815]
+        shake_wrist_top = 0.958
+        shake_wrist_bottom = 0.279
+
+        self.joints.position = joints_start
+        self.pub_joints.publish(self.joints)
+        rospy.sleep(1.0)
+
+        self.state.speed = 'Med'
+        self.joints.position = shake_start
+        self.pub_joints.publish(self.joints)
+        rospy.sleep(1.0)
+
+        flip = True
+        for i in range(8):
+            if flip:
+                self.joints.position[4] = shake_wrist_top
+            else:
+                self.joints.position[4] = shake_wrist_bottom
+            self.pub_joints.publish(self.joints)
+            rospy.sleep(0.2)
+        rospy.sleep(1.0)
+        self.state.speed = 'Slow'
         self.joints.position = joints_start
         self.pub_joints.publish(self.joints)
 
