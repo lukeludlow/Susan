@@ -88,7 +88,7 @@ class Tricks(Controller):
         # Publishers
         self.pub_gimbal = rospy.Publisher('/gimbal_cmd_position', DynamixelState, queue_size = 1)
 
-         self.state = ArmState()
+        self.state = ArmState()
         self.joints = JointState()
         #self.joints_cart = Float32MultiArray()
         self.pose_current = Pose()
