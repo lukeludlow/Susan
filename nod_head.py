@@ -86,3 +86,8 @@ class Tricks(Controller):
         pub_gimbal.publish(self.gimbal_cmd)
         rospy.sleep(2.)
 
+if __name__ == '__main__':
+    rospy.init_node('nod_head')
+    tricks = Tricks()
+    tricks.nod()
+    
