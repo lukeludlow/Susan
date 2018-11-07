@@ -92,7 +92,19 @@ class Tricks():
         self.state.speed = 'Med'
         self.joints.position = shake_start
         self.pub_joints.publish(self.joints)
-        rospy.sleep(3.0)
+        self.grip = 100
+        self.pub_grip.publish(self.grip)
+        rospy.sleep(2.5)
+        self.grip = 0
+        self.pub_grip.publish(self.grip)
+        rospy.sleep(1.0)
+
+        self.grip = -100
+        self.pub_grip.publish(self.grip)
+        rospy.sleep(1.0)
+        self.grip = 0
+        self.pub_grip.publish(self.grip)
+        rospy.sleep(0.5)
 
         flip = False
         for i in range(8):
@@ -103,7 +115,11 @@ class Tricks():
                 self.joints.position[4] = shake_wrist_bottom
             self.pub_joints.publish(self.joints)
             rospy.sleep(0.2)
+        self.grip = 100
+        self.pub_grip.publish(self.grip)
         rospy.sleep(1.0)
+        self.grip = 0
+        self.pub_grip.publish(self.grip)
         self.state.speed = 'Slow'
         self.joints.position = joints_start
         self.pub_joints.publish(self.joints)
