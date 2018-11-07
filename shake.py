@@ -80,7 +80,16 @@ class Tricks():
         self.getArmPosition()
 
     def shake(self):
-        pass
+        self.joints.position[0] = 0
+        self.joints.position[1] = 0
+        self.joints.position[2] = 0
+        self.joints.position[3] = 0
+        self.joints.position[4] = 0
+        self.joints.position[5] = 0
+        self.pub_joints.publish(self.joints)
+
+        self.grip = -100
+        self.pub_grip.publish(self.grip)
 
     def ikJointCallback(self, msg):
         #for i in range(0,6):
