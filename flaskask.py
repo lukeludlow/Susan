@@ -1,6 +1,6 @@
 # requires python2.7
-from flask import Flask, render_template
-from flask_ask import Ask, statement, question, session
+from flask import Flask, render_template  # pylint: disable=E0401
+from flask_ask import Ask, statement, question, session  # pylint: disable=E0401
 import json
 import requests
 import time
