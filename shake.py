@@ -156,7 +156,7 @@ class Tricks():
                 self.joints.position[2] = wristResp.position[2]
                 self.joints.position[3] = wristResp.position[3]
                 rospy.loginfo('Got Arm Position')
-                print wristResp.position
+                print wristResp.position  # pylint: disable=E0001
             except rospy.ServiceException, e:
                 print "Service call failed: %s" %e
             except Exception, e:
