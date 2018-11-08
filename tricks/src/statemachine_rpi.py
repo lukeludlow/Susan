@@ -17,14 +17,14 @@ class StateMachine:
         rospy.loginfo('state machine')
 
 def trickCallback(msg):
-    return msg.trick
+    return msg.average_temperature
 
 if __name__ == '__main__':
     rospy.init_node('automaton')
     rospy.loginfo('###')
     rospy.loginfo('### automaton running!')
     rospy.loginfo('###')
-    sub = rospy.Subscriber('/tricks', Trick, trickCallback)
+    sub = rospy.Subscriber('/tricks', Temperature, trickCallback)
 
     # trick objects    
     SM = StateMachine()
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     rate = rospy.Rate(60)  # set rate to 60 hz
     while not rospy.is_shutdown():
 
-        if sub == 'nod':
+        if sub == 0.69:
             nod_trick.nod()
 
         rate.sleep()
