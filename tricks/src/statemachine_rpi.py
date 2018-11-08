@@ -16,11 +16,15 @@ class StateMachine:
         # publishers
         rospy.loginfo('state machine')
 
+def trickCallback(msg):
+    return msg.trick
+
 if __name__ == '__main__':
     rospy.init_node('automaton')
     rospy.loginfo('###')
     rospy.loginfo('### automaton running!')
     rospy.loginfo('###')
+    sub = rospy.Subscriber('/trick', Trick, trickCallback)
 
     # trick objects    
     SM = StateMachine()
@@ -28,6 +32,7 @@ if __name__ == '__main__':
     nod_trick = Nod()
     shake_trick = Shake()
 
+    # start up test
     nod_trick.nod()
     rospy.sleep(4.0)
     shake_trick.shake() 
@@ -37,6 +42,7 @@ if __name__ == '__main__':
     rate = rospy.Rate(60)  # set rate to 60 hz
     while not rospy.is_shutdown():
 
-
+        if sub == 'nod':
+            nod_trick.nod()
 
         rate.sleep()
