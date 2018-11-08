@@ -25,33 +25,18 @@ if __name__ == '__main__':
     # trick objects    
     SM = StateMachine()
     xboxarm = Arm_XBOX()
-
     nod_trick = Nod()
-    nod_trick.nod()
-    rospy.sleep(10.0)
     shake_trick = Shake()
+
+    nod_trick.nod()
+    rospy.sleep(4.0)
     shake_trick.shake() 
+    rospy.sleep(2.0)
 
     # execute automaton
     rate = rospy.Rate(60)  # set rate to 60 hz
     while not rospy.is_shutdown():
-        # Start when Xbox controller recognized
-        if len(xboxarm.joy.buttons) > 0 and xboxarm.trigger_check():
-            if not xboxarm.ready_msg:
-                rospy.loginfo('Arm Controller Ready')
-                xboxarm.ready_msg = True
-            # every time check toggle of state
-            xboxarm.check_method()
-            # check for kill switch (True = Killed)
-            if xboxarm.state.kill  == False:
-                # call appropriate function for state
-                # defaults to JointControl
-                if xboxarm.state.mode == 'JointControl':
-                    xboxarm.joint_cmd()
-                elif xboxarm.state.mode == 'IK Arm - Base,Tool':
-                    xboxarm.arm_IK_base_tool()
-                elif xboxarm.state.mode == 'IK Arm - Tool,Tool':
-                    xboxarm.arm_IK_tool_tool()
-                else:
-                    xboxarm.joint_cmd()
+
+
+
         rate.sleep()

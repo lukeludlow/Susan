@@ -12,8 +12,6 @@ from std_msgs.msg import String,Float32MultiArray,UInt16MultiArray, Header, Int8
 import time
 import numpy as np
 from urdf_parser_py.urdf import URDF
-#from pykdl_utils.kdl_parser import kdl_tree_from_urdf_model
-#from pykdl_utils.kdl_kinematics import KDLKinematics
 import random
 import tf
 import tf.transformations as tr
@@ -80,15 +78,15 @@ class Shake():
         self.getArmPosition()
 
     def shake(self):
-        # 0 = 
-        # 1 = 
-        # 2 =
+        # 0 = rotator 
+        # 1 = shoulder 
+        # 2 = elbow
         # 3 = wrist main big joint - don't twist!!!
         # 4 = wrist vertical motion - don't shake! very weak!
         # 5 = wrist twist - also very weak!
         #joints_start = [-1.513, -1.8555, -3.050, -1.616, -0.2, 1.930]
         #joints_start = self.joints.position
-        shake_start = [-1.400, -2.900, -2.720, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
+        shake_start = [-1.400, -2.800, -2.700, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
         #shake_start = [-1.485, -2.973, -2.583, shake_setup[3], shake_setup[4], shake_setup[5]]
         #shake_wrist_top = 0.958
         #shake_wrist_bottom = 0.279
