@@ -1,3 +1,4 @@
+# requires python2.7
 from flask import Flask, render_template
 from flask_ask import Ask, statement, question, session
 import json
@@ -25,9 +26,9 @@ def nod():
     return statement('rover, are you listening?')
 
 @ask.intent('ShakeIntent')
-def nod():
+def shake():
     subprocess.call(['./launch_shake.sh'])
-    return statement('rover. shake.'])
+    return statement(['rover. shake.'])
 
 
 if __name__ == '__main__':
