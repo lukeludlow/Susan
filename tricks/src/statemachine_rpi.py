@@ -20,7 +20,7 @@ class StateMachine:
 
         #rospy.init_node('automaton')
 
-        self.sub = rospy.Subscriber('/tricks', Temperature, trickCallback)
+        self.sub = rospy.Subscriber('/tricks', Temperature, self.trickCallback)
 
 
         self.nod_trick = Nod()
