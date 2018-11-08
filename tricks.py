@@ -22,7 +22,7 @@ import numpy as np
 from urdf_parser_py.urdf import URDF
 
 from flask import Flask, render_template
-from flash_ask import Ask, statement, question, session
+from flask_ask import Ask, statement, question, session
 import json
 import requests
 import sys
