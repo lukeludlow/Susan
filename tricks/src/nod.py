@@ -113,9 +113,3 @@ class Tricks(Controller):
         self.gimbal_cmd.pan = self.PAN_HOME
         self.gimbal_cmd.tilt = self.TILT_HOME
         self.pub_gimbal.publish(self.gimbal_cmd)
-
-if __name__ == '__main__':
-    rospy.init_node('nod_head')
-    tricks = Tricks()
-    tricks.nod()
-    

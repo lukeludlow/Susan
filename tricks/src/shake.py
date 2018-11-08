@@ -167,10 +167,3 @@ class Tricks():
                 self.joints.position[3] = 0.0
                 self.joints.position[4] = 0.0
                 self.joints.position[5] = 0.0
-        
-
-if __name__ == '__main__':
-    rospy.init_node('nod_head')
-    tricks = Tricks()
-    tricks.shake()
-    
