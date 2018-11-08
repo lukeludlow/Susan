@@ -18,7 +18,7 @@ import random
 import tf
 import tf.transformations as tr
 
-class Tricks():
+class Shake():
     def __init__(self):
         self.state = ArmState()
         self.joints = JointState()

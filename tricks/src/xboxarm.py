@@ -534,10 +534,9 @@ class Arm_XBOX():
                 self.joints.position[2] = wristResp.position[2]
                 self.joints.position[3] = wristResp.position[3]
                 rospy.loginfo('Got Arm Position')
-                print wristResp.position
-            except rospy.ServiceException, e:
-                print "Service call failed: %s" %e
-            except Exception, e:
+            except rospy.ServiceException:  
+                rospy.logwarn("Service call failed")
+            except Exception:
                 rospy.logwarn('Arm could not find joints!!')
                 self.joints.position[0] = 0.0
                 self.joints.position[1] = 0.0

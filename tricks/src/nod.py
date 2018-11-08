@@ -8,10 +8,10 @@ from rover_msgs.msg import TennisLocation, DynamixelState
 from std_srvs.srv import Empty
 from rover_msgs.srv import DistHeadingConv, WaypointSend
 
-class Tricks(Controller):
+class Nod(Controller):
     def __init__(self):
         Controller.__init__(self)
-        self.name = "tricks"
+        self.name = "nod"
 
         # Constants
         self.BALL_W = 2.3   # rad/s, rover frame

@@ -6,8 +6,8 @@ from std_srvs.srv import Empty, EmptyResponse, Trigger, TriggerResponse
 from rover_msgs.msg import WaypointNav, NavStatus
 # trick modules
 from xboxarm import Arm_XBOX
-import shake
-import nod
+from shake import Shake
+from nod import Nod
 
 class StateMachine:
     def __init__(self):
@@ -15,39 +15,6 @@ class StateMachine:
         self.rate = rospy.Rate(60)  # set rate to 60 hz
         # publishers
         rospy.loginfo('state machine')
-
-    def execute(self):
-        while not rospy.is_shutdown():
-            self.check_states()
-            self.send_command(v, w)
-            self.rate.sleep()  # execute at specified rate
-        self.status_timer.shutdown()
-
-    # check for transitions between states
-    def check_states(self):
-        #  TODO
-        """
-        if self.controller == self.gotogoal:
-            self.process_go_to_goal()
-
-        elif self.controller == self.obstacle_avoidance:
-            self.process_obstacle()
-
-        elif self.controller == self.approachball:
-            self.process_tennis_ball()
-        """
-
-    # send velocities to wheel_controller
-    def send_wheel_command(self, v, w):
-        cmd_msg = Twist()
-        cmd_msg.linear.x = v
-        cmd_msg.angular.z = w
-        self.pub_drive.publish(cmd_msg)
-
-    def reset(self):
-        self.auto_enable = False
-        self.controller.status = self.controller.default_status
-
 
 if __name__ == '__main__':
     rospy.init_node('automaton')
@@ -58,6 +25,12 @@ if __name__ == '__main__':
     # trick objects    
     SM = StateMachine()
     xboxarm = Arm_XBOX()
+
+    nod_trick = Nod()
+    nod_trick.nod()
+    rospy.sleep(10.0)
+    shake_trick = Shake()
+    shake_trick.shake() 
 
     # execute automaton
     rate = rospy.Rate(60)  # set rate to 60 hz
