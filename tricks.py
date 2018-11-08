@@ -202,9 +202,11 @@ class Tricks(Controller):
         self.gimbal_read_pan = msg.pan
 
     def gimbal_reset(self):
+        print('resetting arm gimbal...')
         self.gimbal_cmd.pan = self.PAN_HOME
         self.gimbal_cmd.tilt = self.TILT_HOME
         self.pub_gimbal.publish(self.gimbal_cmd)
+        print('done')
 
     def nod(self):
         rospy.logwarn('YEET')
@@ -234,9 +236,11 @@ class Tricks(Controller):
         rospy.sleep(1.0)
     
     def resetArm(self):
+        print('resetting arm...')
         joints_start = [-1.513, -1.8555, -3.050, 0, 0.33, -1.680]
         self.joints.position = joints_start
         self.pub_joints.publish(self.joints)
+        print('done')
         rospy.sleep(1.0)
 
     def shake(self):
@@ -317,5 +321,5 @@ if __name__ == '__main__':
     print("done")
 
     print("starting server...")
-    app.run(debug=True, host='0,0,0,0', port=8000)
+    tricks.app.run(debug=True, host='0.0.0.0', port=8000)
     
