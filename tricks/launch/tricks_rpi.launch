@@ -20,6 +20,6 @@
     <node pkg="hal_control" type="arm_control.py" name="xbox_arm_control" output="screen"></node>
     <node pkg="hal_control" type="drive_control.py" name="xbox_drive_control" output="screen"></node>
 
-    <node pkg="statemachine_rpi" type="statemachine_rpi.py" name="statemachine_rpi" output="screen"></node>
+    <node pkg="tricks" type="statemachine_rpi.py" name="statemachine_rpi" output="screen"></node>
 
 </launch>
