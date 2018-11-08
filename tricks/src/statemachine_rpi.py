@@ -4,7 +4,6 @@ import rospy
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty, EmptyResponse, Trigger, TriggerResponse
 from rover_msgs.msg import WaypointNav, NavStatus
-from wheel_controller import WheelController
 # trick modules
 import xboxarm
 import shake
