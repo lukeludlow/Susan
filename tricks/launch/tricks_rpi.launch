@@ -1,11 +1,5 @@
 <launch>
 
-    <node pkg="psoc" type="psoc.py" name="psoc" output="screen"/>
-    <node pkg="dynamixel_control" type="dynamixel_publisher.py" name="dynamixel_feedback_node" output="screen">
-        <param name="wrist_on"  value="true" />
-        <param name="gimbal_on" value="true" />
-    </node>
-
     <param name="joy_node_drive/dev" value="/dev/input/xbox_one" />
     <param name="joy_node_arm/dev" value="/dev/input/xbox_one_arm" />
 

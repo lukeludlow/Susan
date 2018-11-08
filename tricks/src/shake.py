@@ -121,6 +121,9 @@ class Shake():
         self.grip = 0
         self.pub_grip.publish(self.grip)
         self.state.speed = 'Slow'
+        self.joints.position = shake_start
+        self.pub_joints.publish(self.joints)
+        rospy.sleep(0.2)
         self.joints.position = joints_start
         self.pub_joints.publish(self.joints)
 
