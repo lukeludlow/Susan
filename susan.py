@@ -21,7 +21,14 @@ def hello():
 
 @ask.intent('NodIntent')
 def nod():
-    return statement('nod intent')
+    subprocess.call(['./launch_nod.sh'])    
+    return statement('rover, are you listening?')
+
+@ask.intent('ShakeIntent')
+def nod():
+    subprocess.call(['./launch_shake.sh'])
+    return statement('rover. shake.'])
+
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port=8000)
