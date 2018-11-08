@@ -1,0 +1,25 @@
+<launch>
+
+    <node pkg="psoc" type="psoc.py" name="psoc" output="screen"/>
+    <node pkg="dynamixel_control" type="dynamixel_publisher.py" name="dynamixel_feedback_node" output="screen">
+        <param name="wrist_on"  value="true" />
+        <param name="gimbal_on" value="true" />
+    </node>
+
+    <param name="joy_node_drive/dev" value="/dev/input/xbox_one" />
+    <param name="joy_node_arm/dev" value="/dev/input/xbox_one_arm" />
+
+    <node pkg="joy" type="joy_node" name="joy_node_arm" output="screen">
+    <remap from="/joy" to="/joy_arm"/>
+    </node>
+
+    <node pkg="joy" type="joy_node" name="joy_node_drive">
+    <remap from="/joy" to="/joy_drive"/>
+    </node>
+
+    <node pkg="hal_control" type="arm_control.py" name="xbox_arm_control" output="screen"></node>
+    <node pkg="hal_control" type="drive_control.py" name="xbox_drive_control" output="screen"></node>
+
+    <node pkg="statemachine_rpi" type="statemachine_rpi.py" name="statemachine_rpi" output="screen"></node>
+
+</launch>
