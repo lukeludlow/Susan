@@ -295,16 +295,16 @@ class Tricks(Controller):
     
     @ask.intent('HelloIntent')
     def hello():
-        self.yeet()
-        return statement('hi')
+        return statement('hi hello')
 
     @ask.intent('NodIntent')
     def nodIntent():
-        pass
+        self.yeet()
+        return statement('hi nod')
 
     @ask.intent('ShakeIntent')
     def shakeIntent():
-        pass
+        return statement('hi shake')
 
 if __name__ == '__main__':
     rospy.init_node('nod_head')
