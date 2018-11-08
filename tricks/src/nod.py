@@ -4,7 +4,6 @@ import numpy as np
 import rospy
 from math import radians, degrees
 from Controller import Controller
-from PID import PID
 from rover_msgs.msg import TennisLocation, DynamixelState
 from std_srvs.srv import Empty
 from rover_msgs.srv import DistHeadingConv, WaypointSend
@@ -38,8 +37,6 @@ class Tricks(Controller):
         self.ESTIMATE_HEADING_THRESH = 45 # deg
         self.BALL_HEADING_THRESH = 10  # deg
         self.LOST_THRESH = 120  # counts in lost_counter
-
-        self.pid = PID(kp=4.5, ki=0, kd=0.05, lim=self.BALL_W)
 
         # Flags
         self.found_ball = False
