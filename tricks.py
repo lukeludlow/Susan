@@ -26,7 +26,7 @@ from flask_ask import Ask, statement, question, session
 import json
 import requests
 import sys
-from junja2 import Template
+from jinja2 import Template
 import subprocess
 #from pykdl_utils.kdl_parser import kdl_tree_from_urdf_model
 #from pykdl_utils.kdl_kinematics import KDLKinematics
@@ -35,6 +35,9 @@ import tf
 import tf.transformations as tr
 
 class Tricks(Controller):
+    app = Flask(__name__, template_folder='template')
+    ask = Ask(app, '/')
+
     def __init__(self):
         Controller.__init__(self)
         self.name = "tricks"
@@ -278,6 +281,9 @@ class Tricks(Controller):
         self.grip = 0
         self.pub_grip.publish(self.grip)
 
+    def yeet():
+        print("YOOOOOOOOOOOOO")
+
     @ask.launch
     def launch():
         print('launching...')
@@ -285,6 +291,7 @@ class Tricks(Controller):
     
     @ask.intent('HelloIntent')
     def hello():
+        self.yeet()
         return statement('hi')
 
     @ask.intent('NodIntent')
@@ -307,8 +314,6 @@ if __name__ == '__main__':
     print("done")
 
     print("setting up flask ask server...")
-    app = Flask(__name__, template_folder='template')
-    ask = Ask(app, '/')
     print("done")
 
     print("starting server...")
