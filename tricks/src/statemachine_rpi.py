@@ -9,6 +9,9 @@ from xboxarm import Arm_XBOX
 from shake import Shake
 from nod import Nod
 
+nod_trick = Nod()
+shake_trick = Shake()
+
 class StateMachine:
     def __init__(self):
         #rospy.init_node('state_machine')
@@ -18,7 +21,12 @@ class StateMachine:
 
 def trickCallback(msg):
     rospy.loginfo('trickCallback')
-    return msg.average_temperature
+    message = msg.average_temperature
+
+    if message > 0.68 and message < 0.70:
+        rospy.loginfo('callback if statement')
+        nod_trick.nod()
+
 
 if __name__ == '__main__':
     rospy.init_node('automaton')
@@ -30,14 +38,14 @@ if __name__ == '__main__':
     # trick objects    
     SM = StateMachine()
     xboxarm = Arm_XBOX()
-    nod_trick = Nod()
-    shake_trick = Shake()
+    #nod_trick = Nod()
+    #shake_trick = Shake()
 
     # start up test
-    nod_trick.nod()
-    rospy.sleep(4.0)
-    shake_trick.shake() 
-    rospy.sleep(2.0)
+    #nod_trick.nod()
+    #rospy.sleep(4.0)
+    #shake_trick.shake() 
+    #rospy.sleep(2.0)
 
     # execute automaton
     rate = rospy.Rate(60)  # set rate to 60 hz
