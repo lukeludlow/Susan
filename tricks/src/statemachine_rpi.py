@@ -3,7 +3,7 @@ from __future__ import print_function
 import rospy
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty, EmptyResponse, Trigger, TriggerResponse
-from rover_msgs.msg import WaypointNav, NavStatus
+from rover_msgs.msg import WaypointNav, NavStatus, Temperature
 # trick modules
 from xboxarm import Arm_XBOX
 from shake import Shake
@@ -17,6 +17,7 @@ class StateMachine:
         rospy.loginfo('state machine')
 
 def trickCallback(msg):
+    rospy.loginfo('trickCallback')
     return msg.average_temperature
 
 if __name__ == '__main__':
@@ -42,7 +43,8 @@ if __name__ == '__main__':
     rate = rospy.Rate(60)  # set rate to 60 hz
     while not rospy.is_shutdown():
 
-        if sub == 0.69:
+        if sub > 0.68 and sub < 0.70:
+            rospy.loginfo('if statement')
             nod_trick.nod()
 
         rate.sleep()
