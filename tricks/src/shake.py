@@ -80,15 +80,20 @@ class Shake():
         self.getArmPosition()
 
     def shake(self):
-        joints_start = [-1.513, -1.8555, -3.050, 0, 0.33, -1.680]
-        shake_start = [-1.485, -2.973, -2.583, 0, 0.649, -0.815]
-        shake_wrist_top = 0.958
-        shake_wrist_bottom = 0.279
+        # 0 = 
+        # 1 = 
+        # 2 =
+        # 3 = wrist main big joint - don't twist!!!
+        # 4 = wrist vertical motion - don't shake! very weak!
+        # 5 = wrist twist - also very weak!
+        #joints_start = [-1.513, -1.8555, -3.050, -1.616, -0.2, 1.930]
+        #joints_start = self.joints.position
+        shake_start = [-1.400, -2.900, -2.720, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
+        #shake_start = [-1.485, -2.973, -2.583, shake_setup[3], shake_setup[4], shake_setup[5]]
+        #shake_wrist_top = 0.958
+        #shake_wrist_bottom = 0.279
 
-        self.joints.position = joints_start
-        self.pub_joints.publish(self.joints)
-        rospy.sleep(1.0)
-
+        rospy.sleep(0.2)
         self.state.speed = 'Med'
         self.joints.position = shake_start
         self.pub_joints.publish(self.joints)
@@ -106,13 +111,18 @@ class Shake():
         self.pub_grip.publish(self.grip)
         rospy.sleep(0.5)
 
+        pos = shake_start
         flip = False
         for i in range(8):
             flip = not flip
             if flip:
-                self.joints.position[4] = shake_wrist_top
+                pos[2] += 0.4
+                #pos = [shake_start[0], shake_start[1], shake_start[2]+0.4, shake_start[3], shake_start[4], shake_start[5]]
+                #self.joints.position[4] = shake_wrist_top
             else:
-                self.joints.position[4] = shake_wrist_bottom
+                pos[2] -= 0.4
+                #pos = [shake_start[0], shake_start[1], shake_start[2]-0.4, shake_start[3], shake_start[4], shake_start[5]]
+                #self.joints.position[4] = shake_wrist_bottom
             self.pub_joints.publish(self.joints)
             rospy.sleep(0.2)
         self.grip = 100
@@ -124,8 +134,8 @@ class Shake():
         self.joints.position = shake_start
         self.pub_joints.publish(self.joints)
         rospy.sleep(0.2)
-        self.joints.position = joints_start
-        self.pub_joints.publish(self.joints)
+        #self.joints.position = joints_start
+        #self.pub_joints.publish(self.joints)
 
         # self.grip = -100
         # self.pub_grip.publish(self.grip)
