@@ -5,13 +5,13 @@ from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty, EmptyResponse, Trigger, TriggerResponse
 from rover_msgs.msg import WaypointNav, NavStatus
 # trick modules
-import xboxarm
+from xboxarm import Arm_XBOX
 import shake
 import nod
 
 class StateMachine:
     def __init__(self):
-        rospy.init_node('state_machine')
+        #rospy.init_node('state_machine')
         self.rate = rospy.Rate(60)  # set rate to 60 hz
         # publishers
         rospy.loginfo('state machine')
@@ -52,7 +52,7 @@ class StateMachine:
 if __name__ == '__main__':
     rospy.init_node('automaton')
     rospy.loginfo('###')
-    rosply.loginfo('### automaton running!')
+    rospy.loginfo('### automaton running!')
     rospy.loginfo('###')
 
     # trick objects    
