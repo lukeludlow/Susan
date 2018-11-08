@@ -9,31 +9,43 @@ from xboxarm import Arm_XBOX
 from shake import Shake
 from nod import Nod
 
-nod_trick = Nod()
-shake_trick = Shake()
 
 class StateMachine:
     def __init__(self):
-        #rospy.init_node('state_machine')
+        rospy.init_node('state_machine')
+        rospy.loginfo('state machine')
         self.rate = rospy.Rate(60)  # set rate to 60 hz
         # publishers
-        rospy.loginfo('state machine')
 
-def trickCallback(msg):
-    rospy.loginfo('trickCallback')
-    message = msg.average_temperature
 
-    if message > 0.68 and message < 0.70:
-        rospy.loginfo('callback if statement')
-        nod_trick.nod()
+        #rospy.init_node('automaton')
+
+        self.sub = rospy.Subscriber('/tricks', Temperature, trickCallback)
+
+
+        self.nod_trick = Nod()
+        self.shake_trick = Shake()
+
+
+
+    def trickCallback(self, msg):
+        rospy.loginfo('trickCallback')
+        message = msg.average_temperature
+
+        if message > 0.68 and message < 0.70:
+            rospy.loginfo('callback if statement')
+            self.nod_trick.nod()
+
+
+
 
 
 if __name__ == '__main__':
-    rospy.init_node('automaton')
+
+    
     rospy.loginfo('###')
     rospy.loginfo('### automaton running!')
     rospy.loginfo('###')
-    sub = rospy.Subscriber('/tricks', Temperature, trickCallback)
 
     # trick objects    
     SM = StateMachine()
@@ -51,8 +63,6 @@ if __name__ == '__main__':
     rate = rospy.Rate(60)  # set rate to 60 hz
     while not rospy.is_shutdown():
 
-        if sub > 0.68 and sub < 0.70:
-            rospy.loginfo('if statement')
-            nod_trick.nod()
+
 
         rate.sleep()
