@@ -20,6 +20,14 @@ from std_msgs.msg import String,Float32MultiArray,UInt16MultiArray, Header, Int8
 import time
 import numpy as np
 from urdf_parser_py.urdf import URDF
+
+from flask import Flask, render_template
+from flash_ask import Ask, statement, question, session
+import json
+import requests
+import sys
+from junja2 import Template
+import subprocess
 #from pykdl_utils.kdl_parser import kdl_tree_from_urdf_model
 #from pykdl_utils.kdl_kinematics import KDLKinematics
 import random
@@ -270,11 +278,39 @@ class Tricks(Controller):
         self.grip = 0
         self.pub_grip.publish(self.grip)
 
+    @ask.launch
+    def launch():
+        print('launching...')
+        return statement('launch')
+    
+    @ask.intent('HelloIntent')
+    def hello():
+        return statement('hi')
+
+    @ask.intent('NodIntent')
+    def nodIntent():
+        pass
+
+    @ask.intent('ShakeIntent')
+    def shakeIntent():
+        pass
+
 if __name__ == '__main__':
     rospy.init_node('nod_head')
+
+    print("initing new tricks class...")
     tricks = Tricks()
+    print("done")
+    print("reset motor positions...")
     tricks.resetArm()
     tricks.gimbal_reset()
+    print("done")
 
-    # flask.start(tricks)
+    print("setting up flask ask server...")
+    app = Flask(__name__, template_folder='template')
+    ask = Ask(app, '/')
+    print("done")
+
+    print("starting server...")
+    app.run(debug=True, host='0,0,0,0', port=8000)
     
