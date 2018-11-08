@@ -86,7 +86,7 @@ class Shake():
         # 5 = wrist twist - also very weak!
         #joints_start = [-1.513, -1.8555, -3.050, -1.616, -0.2, 1.930]
         #joints_start = self.joints.position
-        shake_start = [-1.400, -2.800, -2.700, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
+        shake_start = [-1.400, -2.600, -2.500, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
         #shake_start = [-1.485, -2.973, -2.583, shake_setup[3], shake_setup[4], shake_setup[5]]
         #shake_wrist_top = 0.958
         #shake_wrist_bottom = 0.279

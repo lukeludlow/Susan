@@ -38,6 +38,31 @@ class StateMachine:
 
 
 
+        if message > 0.58 and message < 0.60:
+            rospy.loginfo('callback if statement')
+            self.shake_trick.shake()
+
+
+        if message > 0.58 and message < 0.60:
+            rospy.loginfo('callback if statement')
+            self.shake_trick.dab()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
