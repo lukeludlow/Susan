@@ -13,7 +13,7 @@ ask = Ask(app, '/')
 
 @ask.launch
 def launch():
-    subprocess.call(['./scripts/pythontest.sh'])
+    #subprocess.call(['./scripts/pythontest.sh'])
     return statement('launch')
 
 @ask.intent('HelloIntent')
@@ -22,7 +22,8 @@ def hello():
 
 @ask.intent('NodIntent')
 def nod():
-    subprocess.call(['./launch_nod.sh'])    
+    #subprocess.call(['./launch_nod.sh'])    
+    subprocess.call(['./scripts/pubtrick_nod.sh'])
     return statement('rover, are you listening?')
 
 @ask.intent('ShakeIntent')

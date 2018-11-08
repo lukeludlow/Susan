@@ -24,7 +24,7 @@ if __name__ == '__main__':
     rospy.loginfo('###')
     rospy.loginfo('### automaton running!')
     rospy.loginfo('###')
-    sub = rospy.Subscriber('/trick', Trick, trickCallback)
+    sub = rospy.Subscriber('/tricks', Trick, trickCallback)
 
     # trick objects    
     SM = StateMachine()
