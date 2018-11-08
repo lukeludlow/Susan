@@ -285,25 +285,25 @@ class Tricks(Controller):
         self.grip = 0
         self.pub_grip.publish(self.grip)
 
-    def yeet():
+    def yeet(self):
         print("YOOOOOOOOOOOOO")
 
     @ask.launch
-    def launch():
+    def launch(self):
         print('launching...')
         return statement('launch')
     
     @ask.intent('HelloIntent')
-    def hello():
+    def hello(self):
         return statement('hi hello')
 
     @ask.intent('NodIntent')
-    def nodIntent():
+    def nodIntent(self):
         self.yeet()
         return statement('hi nod')
 
     @ask.intent('ShakeIntent')
-    def shakeIntent():
+    def shakeIntent(self):
         return statement('hi shake')
 
 if __name__ == '__main__':
