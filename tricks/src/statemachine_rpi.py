@@ -25,7 +25,7 @@ class StateMachine:
 
         self.nod_trick = Nod()
         self.shake_trick = Shake()
-
+        self.dab_trick = Shake()
 
 
     def trickCallback(self, msg):
@@ -36,32 +36,13 @@ class StateMachine:
             rospy.loginfo('callback if statement')
             self.nod_trick.nod()
 
-
-
         if message > 0.58 and message < 0.60:
             rospy.loginfo('callback if statement')
             self.shake_trick.shake()
 
-
         if message > 0.48 and message < 0.50:
             rospy.loginfo('callback if statement')
-            self.shake_trick.dab()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            self.dab_trick.dab()
 
 
 
