@@ -85,6 +85,10 @@ class Shake():
 
         self.getArmPosition()
 
+   def gimbalStateCallback(self, msg):
+        self.gimbal_read_pan = msg.pan
+
+
     def dab(self):
         
         init_pos = [-1.400, -2.600, -2.500, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
