@@ -28,7 +28,7 @@ def nod():
 
 @ask.intent('ShakeIntent')
 def shake():
-    subprocess.call(['./launch_shake.sh'])
+    subprocess.call(['./scripts/pubtrick_shake.sh'])
     return statement(['rover. shake.'])
 
 

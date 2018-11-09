@@ -84,7 +84,7 @@ if __name__ == '__main__':
     #shake_trick.shake() 
     #rospy.sleep(2.0)
 
-    SM.nod_trick.nod()
+    #SM.nod_trick.nod()
 
     # execute automaton
     rate = rospy.Rate(60)  # set rate to 60 hz
