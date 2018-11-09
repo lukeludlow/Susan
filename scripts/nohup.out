@@ -1,0 +1,20 @@
+bash: line 1: rostopic: command not found
+bash: line 1: rostopic: command not found
+TEST pubtrick_nod.sh on pi
+bash: line 1: rostopic: command not found
+TEST pubnod.sh
+bash: line 3: rostopic: command not found
+TEST pubnod.sh
+bash: line 4: /home/nvidia/pubtrick.sh: No such file or directory
+Traceback (most recent call last):
+  File "/opt/ros/kinetic/bin/rostopic", line 35, in <module>
+    rostopic.rostopicmain()
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rostopic/__init__.py", line 2103, in rostopicmain
+    _rostopic_cmd_pub(argv)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rostopic/__init__.py", line 1772, in _rostopic_cmd_pub
+    pub, msg_class = create_publisher(topic_name, topic_type, latch)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rostopic/__init__.py", line 1606, in create_publisher
+    rospy.init_node('rostopic', anonymous=True, disable_rosout=True, disable_rostime=True)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rospy/client.py", line 323, in init_node
+    raise rospy.exceptions.ROSInitException("init_node interrupted before it could complete")
+rospy.exceptions.ROSInitException: init_node interrupted before it could complete
