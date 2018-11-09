@@ -43,7 +43,7 @@ class StateMachine:
             self.shake_trick.shake()
 
 
-        if message > 0.58 and message < 0.60:
+        if message > 0.48 and message < 0.50:
             rospy.loginfo('callback if statement')
             self.shake_trick.dab()
 

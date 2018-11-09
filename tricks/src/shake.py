@@ -52,6 +52,14 @@ class Shake():
         self.clear = [-0.02417092222061374, -2.5997124416558117, -1.0112442595633835, -3.141592653589793, 0.0, 0.0]
         self.clamp = [2.6461728731994203, -3.0803258202728627, -1.7390465576449696, -3.124139361069849, -0.17890474362474218, 0.02768212655435109]
 
+        self.gimbal_cmd = DynamixelState()
+
+        # Subscribers
+        self.sub_gimbal_state = rospy.Subscriber('/gimbal_state', DynamixelState, self.gimbalStateCallback)
+        # Publishers
+        self.pub_gimbal = rospy.Publisher('/gimbal_cmd_position', DynamixelState, queue_size = 1)
+
+
         #################################
         # Publishers and Subscribers
         #################################
@@ -76,6 +84,67 @@ class Shake():
         self.ready_msg = False
 
         self.getArmPosition()
+
+    def dab(self):
+        
+        init_pos = [-1.400, -2.600, -2.500, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
+        dab_startpos = [-2.400, -2.020, 0.081, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
+        dab_endpos = [-2.800, -2.02, 0.666, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
+
+        rospy.logwarn('WARNING: DABBING ON THE HATERS')
+
+        self.state.speed = 'Med'
+        self.joints.position = init_pos
+        self.pub_joints.publish(self.joints)
+        rospy.sleep(2.0)
+
+        self.state.speed = 'Med'
+        self.joints.position = dab_startpos
+        self.pub_joints.publish(self.joints)
+        rospy.sleep(2.0)
+
+        self.state.speed = 'Fast'
+        self.joints.position = endpos
+
+        # head
+        rospy.logwarn('NOD HEAD')
+        self.gimbal_reset()
+        rospy.sleep(1.0)
+        turnaround_angle = radians(360)
+        self.gimbal_cmd.pan = turnaround_angle
+        self.pub_gimbal.publish(self.gimbal_cmd)
+        rospy.sleep(1.5)
+
+        # head down
+        dab_angle = radians(40)
+        self.gimbal_cmd.tilt = dab_angle
+
+        # perform the dab flick
+        self.pub_gimbal.publish(self.gimbal_cmd)
+        self.pub_joints.publish(self.joints)
+
+        rospy.sleep(1.0)
+
+        self.state.speed = 'Fast'
+        self.joints.position = dab_startpos
+        self.pub_joints.publish(self.joints)
+        self.gimbal_reset()
+        rospy.sleep(1.0)
+
+        self.state.speed = 'Med'
+        self.joints.position = init_pos
+        self.pub_joints.publish(self.joints)
+        rospy.sleep(2.0)
+
+
+    def gimbal_reset(self):
+        self.PAN_HOME = 1  # 1 radian is actually zero position for pan
+        tilt_offset = radians(20)
+        self.TILT_HOME = radians(20) + tilt_offset
+        self.gimbal_cmd.pan = self.PAN_HOME
+        self.gimbal_cmd.tilt = self.TILT_HOME
+        self.pub_gimbal.publish(self.gimbal_cmd)
+
 
     def shake(self):
         # 0 = rotator 

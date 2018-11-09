@@ -31,6 +31,12 @@ def shake():
     subprocess.call(['./scripts/pubtrick_shake.sh'])
     return statement(['rover. shake.'])
 
+@ask.intent('DabIntent')
+def dab():
+    subprocess.call(['./scripts/pubtrick_dab.sh'])
+    return statement(['rover. dab on the haters.'])
+
+
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port=8000)
