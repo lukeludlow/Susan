@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 import rospy
 import math
 import copy
@@ -16,20 +15,47 @@ import random
 import tf
 import tf.transformations as tr
 
-class Shake():
+class Dab(Controller):
     def __init__(self):
+        Controller.__init__(self)
+        self.name = "dab"
+
+        # HEAD STUFF
+        # constants
+        self.PAN_HOME = 1  # 1 radian is actually zero position for pan
+        self.PAN_START = radians(207)  # 207 is facing backwards-left, -90 is backwards-right
+        self.PAN_END = radians(-90)
+        self.PAN_SPEED = 0.25  # speed of pan from left to right [rad/s]
+        tilt_offset = radians(20)
+        self.TILT_START = radians(80) + tilt_offset
+        self.TILT_MID = radians(45) + tilt_offset
+        self.TILT_HOME = radians(20) + tilt_offset
+        self.TILT_SHORT_START = radians(40) + tilt_offset
+        self.PAN_SHORT_START = self.PAN_HOME + radians(45)
+        self.PAN_SHORT_END = self.PAN_HOME - radians(45)
+        self.pan_start = self.PAN_START
+        self.pan_end = self.PAN_END
+        # initialize head gimble
+        self.gimbal_cmd = DynamixelState()
+        self.gimbal_cmd.pan = self.PAN_HOME
+        self.gimbal_cmd.tilt = self.TILT_HOME
+        self.gimbal_read_pan = 0
+        # subscribers and publishers
+        self.sub_gimbal_state = rospy.Subscriber('/gimbal_state', DynamixelState, self.gimbalStateCallback)
+        self.pub_gimbal = rospy.Publisher('/gimbal_cmd_position', DynamixelState, queue_size = 1)
+        
+
+        # ARM STUFF
         self.state = ArmState()
         self.joints = JointState()
         self.pose_current = Pose()
         self.pose_cmd = Pose()
         self.grip = 0
         self.lock_grip = False
-
         # Initialize state; default = JointControl & Slow
         self.state.mode = 'JointControl' # 'JointControl', 'IK Arm - Base,Tool', 'IK Arm - Tool,Tool'
         self.state.speed = 'Slow' # Slow, Med, Fast
         self.state.kill = False
-
         # Initialize joints = instance of JointState
         self.joints.header = Header()
         self.joints.header.stamp = rospy.Time.now()
@@ -37,27 +63,23 @@ class Shake():
         self.joints.position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         self.joints.velocity = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         self.joints.effort = []
-
         # Initialize FK
         self.init_ik = True
         self.pose_current.position.x = 0.0
         self.pose_current.position.y = 0.0
         self.pose_current.position.z = 0.0
-
-        # Pre-set configurations
+        # arm pre-set configurations
         self.rear_home = [-1.114, -2.123, -0.553, 0.0, 0.0, 0.0]
         self.chute_X = [2.060274156412888, -2.0234791766029856, -0.6918490064483838, -3.124139361069849, -0.308263710245888, -0.17661176511209503]
         self.chute_B = [2.0489237223000636, -3.1396775580652347, -1.4859738161057947, -3.124139361069849, 0.0, 0.0]
         self.clear = [-0.02417092222061374, -2.5997124416558117, -1.0112442595633835, -3.141592653589793, 0.0, 0.0]
         self.clamp = [2.6461728731994203, -3.0803258202728627, -1.7390465576449696, -3.124139361069849, -0.17890474362474218, 0.02768212655435109]
-
         #################################
         # Publishers and Subscribers
         #################################
         # Solver Answers
         self.sub_pose_cmd= rospy.Subscriber('/pose_cmd_ik', Pose, self.ikPoseCallback)
         self.sub_joint_cmd_ik = rospy.Subscriber('/joint_cmd_ik',JointState, self.ikJointCallback)
-
         # Useful GUI info
         self.pub_state = rospy.Publisher('/arm_state_cmd', ArmState, queue_size = 10)
         # Info sent to psoc.py and DynamixelPublisher.py about Joint positions
@@ -72,68 +94,15 @@ class Shake():
         self.ready_msg = False
         self.getArmPosition()
 
+    # head helper functions        
+    def gimbalStateCallback(self, msg):
+        self.gimbal_read_pan = msg.pan
+    def gimbal_reset(self):
+        self.gimbal_cmd.pan = self.PAN_HOME
+        self.gimbal_cmd.tilt = self.TILT_HOME
+        self.pub_gimbal.publish(self.gimbal_cmd)
 
-    def shake(self):
-        # 0 = rotator 
-        # 1 = shoulder 
-        # 2 = elbow
-        # 3 = wrist main big joint - don't twist!!!
-        # 4 = wrist vertical motion - don't shake! very weak!
-        # 5 = wrist twist - also very weak!
-        #joints_start = [-1.513, -1.8555, -3.050, -1.616, -0.2, 1.930]
-        #joints_start = self.joints.position
-        shake_start = [-1.400, -2.600, -2.500, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
-        #shake_start = [-1.485, -2.973, -2.583, shake_setup[3], shake_setup[4], shake_setup[5]]
-        #shake_wrist_top = 0.958
-        #shake_wrist_bottom = 0.279
-
-        rospy.sleep(0.2)
-        self.state.speed = 'Med'
-        self.joints.position = shake_start
-        self.pub_joints.publish(self.joints)
-        self.grip = 100
-        self.pub_grip.publish(self.grip)
-        rospy.sleep(2.5)
-        self.grip = 0
-        self.pub_grip.publish(self.grip)
-        rospy.sleep(1.0)
-
-        self.grip = -100
-        self.pub_grip.publish(self.grip)
-        rospy.sleep(1.0)
-        self.grip = 0
-        self.pub_grip.publish(self.grip)
-        rospy.sleep(0.5)
-
-        pos = shake_start
-        flip = False
-        for i in range(8):
-            flip = not flip
-            if flip:
-                pos[2] += 0.4
-                #pos = [shake_start[0], shake_start[1], shake_start[2]+0.4, shake_start[3], shake_start[4], shake_start[5]]
-                #self.joints.position[4] = shake_wrist_top
-            else:
-                pos[2] -= 0.4
-                #pos = [shake_start[0], shake_start[1], shake_start[2]-0.4, shake_start[3], shake_start[4], shake_start[5]]
-                #self.joints.position[4] = shake_wrist_bottom
-            self.pub_joints.publish(self.joints)
-            rospy.sleep(0.2)
-        self.grip = 100
-        self.pub_grip.publish(self.grip)
-        rospy.sleep(1.0)
-        self.grip = 0
-        self.pub_grip.publish(self.grip)
-        self.state.speed = 'Slow'
-        self.joints.position = shake_start
-        self.pub_joints.publish(self.joints)
-        rospy.sleep(0.2)
-        #self.joints.position = joints_start
-        #self.pub_joints.publish(self.joints)
-
-        # self.grip = -100
-        # self.pub_grip.publish(self.grip)
-
+    # arm helper functions
     def ikJointCallback(self, msg):
         #for i in range(0,6):
         #    self.joints.position[i] = msg.position[i]
@@ -174,3 +143,57 @@ class Shake():
                 self.joints.position[3] = 0.0
                 self.joints.position[4] = 0.0
                 self.joints.position[5] = 0.0
+
+
+    def dab(self):
+        
+        init_pos = [-1.400, -2.600, -2.500, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
+        dab_startpos = [-2.400, -2.020, 0.081, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
+        dab_endpos = [-2.800, -2.02, 0.666, self.joints.position[3], self.joints.position[4], self.joints.position[5]]
+
+        rospy.logwarn('WARNING: FLEX ALERT')
+
+        self.state.speed = 'Med'
+        self.joints.position = init_pos
+        self.pub_joints.publish(self.joints)
+        rospy.sleep(2.0)
+
+        # move arm to dab position
+        self.state.speed = 'Med'
+        self.joints.position = dab_startpos
+        self.pub_joints.publish(self.joints)
+        rospy.sleep(2.0)
+
+        # turn head around
+        self.gimbal_reset()
+        rospy.sleep(1.0)
+        turnaround_angle = radians(360)
+        self.gimbal_cmd.pan = turnaround_angle
+        self.pub_gimbal.publish(self.gimbal_cmd)
+        rospy.sleep(1.5)
+
+        # set head down pos
+        dab_angle = radians(40)
+        self.gimbal_cmd.tilt = dab_angle
+        # set dab flick position
+        self.state.speed = 'Fast'
+        self.joints.position = endpos
+
+        # perform the dab flick
+        rospy.loginfo("FLEX")
+        self.pub_gimbal.publish(self.gimbal_cmd)
+        self.pub_joints.publish(self.joints)
+        rospy.sleep(1.0)
+
+        # flick back to normal dab position
+        self.state.speed = 'Fast'
+        self.joints.position = dab_startpos
+        self.pub_joints.publish(self.joints)
+        self.gimbal_reset()
+        rospy.sleep(1.0)
+
+        # reset positions
+        self.state.speed = 'Med'
+        self.joints.position = init_pos
+        self.pub_joints.publish(self.joints)
+        rospy.sleep(2.0)
